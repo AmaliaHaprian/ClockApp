@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "description": "Tiny React 16 app used as the T9 Transformer demo target (see fixture/sample-app/README.md).",
-  "dependencies": {
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
-  },
   "scripts": {
     "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.js=jsx --loader:.jsx=jsx",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "test": "jest"
+  },
+  "dependencies": {
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -22,7 +23,6 @@
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.5",
     "jest": "^29.7.0",
-    "react-test-renderer": "^16.14.0",
     "typescript": "^5.7.2"
   }
 }
