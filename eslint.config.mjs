@@ -10,6 +10,12 @@ export default [
       ecmaVersion: 2021,
       sourceType: "module",
       parserOptions: { ecmaFeatures: { jsx: true } },
+      globals: {
+        document: "readonly",
+        window: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+      },
     },
     rules: {
       ...js.configs.recommended.rules,
