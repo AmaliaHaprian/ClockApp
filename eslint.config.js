@@ -1,9 +1,12 @@
-// Minimal flat config (ESLint 9): enough to lint the JSX/ESM sources for real.
+// ESLint 9 flat config: lints JSX/ESM sources with React support and environment-specific globals.
 import js from "@eslint/js";
 import react from "eslint-plugin-react";
 
 export default [
+  // Base ESLint recommended rules
   js.configs.recommended,
+
+  // Source files: JSX support with browser globals and React rules
   {
     files: ["src/**/*.{js,jsx}"],
     plugins: { react },
@@ -26,6 +29,8 @@ export default [
       "react/jsx-uses-vars": "error",
     },
   },
+
+  // Test files: Jest globals
   {
     files: ["**/*.test.js"],
     languageOptions: {
@@ -37,6 +42,8 @@ export default [
       },
     },
   },
+
+  // Config files: CommonJS environment with Node.js globals
   {
     files: ["babel.config.js", "jest.config.js"],
     languageOptions: {
@@ -44,6 +51,8 @@ export default [
       globals: { module: "readonly", require: "readonly" },
     },
   },
+
+  // Ignore patterns
   {
     ignores: ["dist/", "node_modules/"],
   },
