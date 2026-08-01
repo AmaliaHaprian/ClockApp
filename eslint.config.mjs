@@ -23,4 +23,17 @@ export default [
       "react/jsx-uses-vars": "error",
     },
   },
+  {
+    files: ["src/**/*.test.{js,jsx}"],
+    languageOptions: {
+      globals: {
+        jest: "readonly",
+        describe: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+      },
+    },
+  },
 ];
