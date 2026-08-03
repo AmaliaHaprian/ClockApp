@@ -17,7 +17,9 @@ test("subscribes on mount and renders a clock div", () => {
   expect(subscribe).toHaveBeenCalledTimes(1);
   expect(root.toJSON().props.className).toBe("clock");
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
 
 test("unsubscribes on unmount", () => {
@@ -54,4 +56,8 @@ test("re-renders with the time passed to the subscribed callback", () => {
   expect(root.toJSON().children[0]).toBe(
     new Date("2026-08-01T09:30:00").toLocaleTimeString(),
   );
+
+  act(() => {
+    root.unmount();
+  });
 });
