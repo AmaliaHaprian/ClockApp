@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 
 import { subscribe } from "./clock-source";
 
@@ -7,7 +7,7 @@ import { subscribe } from "./clock-source";
 // the canonical lifecycle-to-hooks conversion the T9 Transformer performs
 // (componentDidMount/componentWillUnmount -> a single useEffect with cleanup).
 // The transformed form lives in fixture/canned/src/Clock.jsx.
-export default class Clock extends React.Component {
+export default class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = { now: new Date() };
