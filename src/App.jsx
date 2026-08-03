@@ -1,3 +1,5 @@
+import { createRoot } from "react-dom/client";
+
 import Clock from "./Clock";
 
 // Plain functional shell. Out of the demo unit's scope; here only so Clock has
@@ -9,4 +11,11 @@ export default function App() {
       <Clock />
     </main>
   );
+}
+
+const container = document.getElementById("root");
+
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
 }
