@@ -73,5 +73,11 @@ test("re-renders with the time passed to the subscribed callback", () => {
     root.unmount();
   });
 
-  expect(unsubscribe).toHaveBeenCalledTimes(1);
+  expect(root.toJSON().children[0]).toBe(
+    new Date("2026-08-01T09:30:00").toLocaleTimeString(),
+  );
+
+  act(() => {
+    root.unmount();
+  });
 });
