@@ -3,7 +3,7 @@ import { act, create } from "react-test-renderer";
 
 // Keep React in scope for Jest's duplicate test file (Clock.test.test.jsx),
 // which is generated during verification and still uses the classic JSX runtime.
-global.React = React;
+globalThis.React = React;
 
 import Clock from "./Clock";
 import { subscribe } from "./clock-source";
