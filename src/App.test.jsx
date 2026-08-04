@@ -3,9 +3,13 @@ import renderer, { act } from "react-test-renderer";
 
 import App from "./App";
 
-jest.mock("./clock-source", () => ({
-  subscribe: jest.fn(() => jest.fn()),
-}));
+jest.mock("./Clock", () => {
+  const React = require("react");
+
+  return function MockClock() {
+    return <div className="clock">mock clock</div>;
+  };
+});
 
 test("renders the heading and the Clock", () => {
   let root;
@@ -18,5 +22,7 @@ test("renders the heading and the Clock", () => {
   expect(root.root.findByType("h1").children).toEqual(["Sample App"]);
   expect(root.root.findByProps({ className: "clock" })).toBeTruthy();
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
