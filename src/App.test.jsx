@@ -8,23 +8,10 @@ jest.mock("./clock-source", () => ({
   subscribe: jest.fn(),
 }));
 
-describe("App", () => {
-  let cleanup;
-  let consoleErrorSpy;
-  let consoleWarnSpy;
-
-  beforeEach(() => {
-    cleanup = jest.fn();
-    subscribe.mockImplementation(() => cleanup);
-    jest.clearAllMocks();
-    subscribe.mockImplementation(() => cleanup);
-    consoleErrorSpy = jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
-    consoleWarnSpy = jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
-    consoleWarnSpy.mockRestore();
+test("renders the heading and the Clock", () => {
+  let root;
+  act(() => {
+    root = renderer.create(<App someProp="value" />);
   });
 
   test("renders the heading and the Clock and cleans up subscriptions on unmount", () => {
