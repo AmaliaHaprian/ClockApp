@@ -32,7 +32,7 @@ test("unsubscribe stops further ticks", () => {
 });
 
 test("unsubscribe is safe to call more than once", () => {
-  const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+  const clearIntervalSpy = jest.spyOn(globalThis, "clearInterval");
   const unsubscribe = subscribe(jest.fn());
 
   expect(() => {
@@ -44,7 +44,7 @@ test("unsubscribe is safe to call more than once", () => {
 });
 
 test("subscribe uses a 1000ms interval", () => {
-  const setIntervalSpy = jest.spyOn(global, "setInterval");
+  const setIntervalSpy = jest.spyOn(globalThis, "setInterval");
 
   subscribe(jest.fn());
 
