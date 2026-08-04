@@ -78,6 +78,9 @@ test("StrictMode cleanup is idempotent across mount, unmount, and remount", () =
       <StrictMode>
         <Clock />
       </StrictMode>,
+      {
+        unstable_strictMode: true,
+      },
     );
   });
 
