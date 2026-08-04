@@ -28,3 +28,25 @@ test("unsubscribe stops further ticks", () => {
 
   expect(onTick).toHaveBeenCalledTimes(1);
 });
+
+test("unsubscribe is idempotent and does not throw when called multiple times", () => {
+  const onTick = jest.fn();
+  const unsubscribe = subscribe(onTick);
+
+  jest.advanceTimersByTime(1000);
+  expect(onTick).toHaveBeenCalledTimes(1);
+
+  // First unsubscribe call
+  expect(() => {
+    unsubscribe();
+  }).not.toThrow();
+
+  // Second unsubscribe call (simulating StrictMode double-invoke)
+  expect(() => {
+    unsubscribe();
+  }).not.toThrow();
+
+  // Verify no additional callback invocations after multiple unsubscribes
+  jest.advanceTimersByTime(5000);
+  expect(onTick).toHaveBeenCalledTimes(1);
+});
