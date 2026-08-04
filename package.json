@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.js=jsx --loader:.jsx=jsx",
+    "dev": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.js=jsx --loader:.jsx=jsx --servedir=. --serve=8000",
     "lint": "eslint .",
     "test": "jest"
   },
