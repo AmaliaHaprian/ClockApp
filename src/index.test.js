@@ -1,30 +1,31 @@
 jest.mock("./App", () => "mock-app");
+jest.mock("react-dom", () => ({
+  createRoot: mockCreateRoot,
+}));
 
 const mockRender = jest.fn();
 const mockCreateRoot = jest.fn(() => ({ render: mockRender }));
 
-jest.mock("react-dom/client", () => ({
-  createRoot: mockCreateRoot,
-}));
-
 describe("src/index", () => {
   let rootElement;
+  let documentMock;
 
   beforeEach(() => {
     jest.resetModules();
     mockRender.mockClear();
     mockCreateRoot.mockClear();
     rootElement = { id: "root" };
-    global.document = {
+    documentMock = {
       getElementById: jest.fn((id) => (id === "root" ? rootElement : null)),
     };
+    globalThis.document = documentMock;
   });
 
   test("creates a root once for the root container and renders App once", async () => {
     await import("./index");
 
-    expect(document.getElementById).toHaveBeenCalledTimes(1);
-    expect(document.getElementById).toHaveBeenCalledWith("root");
+    expect(documentMock.getElementById).toHaveBeenCalledTimes(1);
+    expect(documentMock.getElementById).toHaveBeenCalledWith("root");
     expect(mockCreateRoot).toHaveBeenCalledTimes(1);
     expect(mockCreateRoot).toHaveBeenCalledWith(rootElement);
     expect(mockRender).toHaveBeenCalledTimes(1);
@@ -32,9 +33,9 @@ describe("src/index", () => {
   });
 
   test("uses the React 18 root API instead of legacy ReactDOM.render", async () => {
-    const reactDomClient = await import("react-dom/client");
+    const reactDom = await import("react-dom");
 
-    expect(reactDomClient.createRoot).toBe(mockCreateRoot);
+    expect(reactDom.createRoot).toBe(mockCreateRoot);
 
     await import("./index");
 
