@@ -14,7 +14,7 @@ describe("src/index bootstrap", () => {
     document.body.innerHTML = '<div id="root"></div>';
     container = document.getElementById("root");
     render = jest.fn();
-    ({ createRoot } = require("react-dom/client"));
+    ({ createRoot } = jest.requireMock("react-dom/client"));
     createRoot.mockReturnValue({ render });
   });
 
@@ -24,7 +24,9 @@ describe("src/index bootstrap", () => {
   });
 
   test("creates a React 18 root for the #root container and renders App", () => {
-    require("./index");
+    jest.isolateModules(() => {
+      jest.requireActual("./index");
+    });
 
     expect(createRoot).toHaveBeenCalledTimes(1);
     expect(createRoot).toHaveBeenCalledWith(container);
@@ -36,7 +38,9 @@ describe("src/index bootstrap", () => {
   });
 
   test("reuses the created root for rendering instead of creating more than one root during bootstrap", () => {
-    require("./index");
+    jest.isolateModules(() => {
+      jest.requireActual("./index");
+    });
 
     expect(createRoot).toHaveBeenCalledTimes(1);
     expect(render).toHaveBeenCalledTimes(1);
