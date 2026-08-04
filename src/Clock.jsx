@@ -12,6 +12,7 @@ export default class Clock extends React.Component {
     super(props);
     this.state = { now: new Date() };
     this.handleTick = this.handleTick.bind(this);
+    this.unsubscribe = null;
   }
 
   componentDidMount() {
@@ -20,7 +21,9 @@ export default class Clock extends React.Component {
 
   componentWillUnmount() {
     if (this.unsubscribe) {
-      this.unsubscribe();
+      const unsubscribe = this.unsubscribe;
+      this.unsubscribe = null;
+      unsubscribe();
     }
   }
 
