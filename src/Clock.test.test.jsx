@@ -23,15 +23,15 @@ test("test(Clock): subscribes on mount and renders a clock div", () => {
     );
   });
 
-  expect(subscribe).toHaveBeenCalledTimes(2);
-  expect(unsubscribe).toHaveBeenCalledTimes(1);
+  expect(subscribe).toHaveBeenCalledTimes(1);
+  expect(unsubscribe).not.toHaveBeenCalled();
   expect(root.toJSON().props.className).toBe("clock");
 
   act(() => {
     root.unmount();
   });
 
-  expect(unsubscribe).toHaveBeenCalledTimes(2);
+  expect(unsubscribe).toHaveBeenCalledTimes(1);
 });
 
 test("test(Clock): unsubscribes on unmount", () => {
@@ -47,14 +47,14 @@ test("test(Clock): unsubscribes on unmount", () => {
     );
   });
 
-  expect(subscribe).toHaveBeenCalledTimes(2);
-  expect(unsubscribe).toHaveBeenCalledTimes(1);
+  expect(subscribe).toHaveBeenCalledTimes(1);
+  expect(unsubscribe).not.toHaveBeenCalled();
 
   act(() => {
     root.unmount();
   });
 
-  expect(unsubscribe).toHaveBeenCalledTimes(2);
+  expect(unsubscribe).toHaveBeenCalledTimes(1);
 });
 
 test("test(Clock): re-renders with the time passed to the subscribed callback", () => {
@@ -74,8 +74,8 @@ test("test(Clock): re-renders with the time passed to the subscribed callback", 
     );
   });
 
-  expect(subscribe).toHaveBeenCalledTimes(2);
-  expect(unsubscribe).toHaveBeenCalledTimes(1);
+  expect(subscribe).toHaveBeenCalledTimes(1);
+  expect(unsubscribe).not.toHaveBeenCalled();
 
   const nextTime = new Date("2026-08-01T09:30:00");
 
@@ -89,5 +89,5 @@ test("test(Clock): re-renders with the time passed to the subscribed callback", 
     root.unmount();
   });
 
-  expect(unsubscribe).toHaveBeenCalledTimes(2);
+  expect(unsubscribe).toHaveBeenCalledTimes(1);
 });
