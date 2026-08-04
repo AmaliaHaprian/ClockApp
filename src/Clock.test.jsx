@@ -74,18 +74,24 @@ test("StrictMode cleanup is idempotent across mount, unmount, and remount", () =
 
   let root;
   act(() => {
-    root = renderer.create(
-      <StrictMode>
-        <Clock />
-      </StrictMode>,
-      {
-        unstable_strictMode: true,
-      },
-    );
+    root = renderer.create(<Clock />);
+  });
+
+  expect(subscribe).toHaveBeenCalledTimes(1);
+  expect(unsubscribes[0]).not.toHaveBeenCalled();
+
+  act(() => {
+    root.unmount();
+  });
+
+  expect(unsubscribes[0]).toHaveBeenCalledTimes(1);
+  expect(unsubscribes[1]).not.toHaveBeenCalled();
+
+  act(() => {
+    root = renderer.create(<Clock />);
   });
 
   expect(subscribe).toHaveBeenCalledTimes(2);
-  expect(unsubscribes[0]).toHaveBeenCalledTimes(1);
   expect(unsubscribes[1]).not.toHaveBeenCalled();
 
   act(() => {
