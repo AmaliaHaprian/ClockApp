@@ -1,5 +1,3 @@
-import React from "react";
-
 import Clock from "./Clock";
 
 // Plain functional shell. Out of the demo unit's scope; here only so Clock has
