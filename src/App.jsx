@@ -1,10 +1,8 @@
 import React from "react";
 
-import Clock from "./Clock";
+import Clock from "./Clock.jsx";
 
-// Plain functional shell. Out of the demo unit's scope; here only so Clock has
-// a parent to render it.
-export default function App() {
+export default function App(props) {
   return (
     <main>
       <h1>Sample App</h1>
