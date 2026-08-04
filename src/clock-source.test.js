@@ -16,6 +16,8 @@ test("subscribe calls back with a Date on each tick", () => {
 
   expect(onTick).toHaveBeenCalledTimes(3);
   expect(onTick.mock.calls[0][0]).toBeInstanceOf(Date);
+  expect(onTick.mock.calls[1][0]).toBeInstanceOf(Date);
+  expect(onTick.mock.calls[2][0]).toBeInstanceOf(Date);
 });
 
 test("unsubscribe stops further ticks", () => {
@@ -23,6 +25,18 @@ test("unsubscribe stops further ticks", () => {
   const unsubscribe = subscribe(onTick);
 
   jest.advanceTimersByTime(1000);
+  unsubscribe();
+  jest.advanceTimersByTime(5000);
+
+  expect(onTick).toHaveBeenCalledTimes(1);
+});
+
+test("unsubscribe is safe to call more than once and does not leak intervals", () => {
+  const onTick = jest.fn();
+  const unsubscribe = subscribe(onTick);
+
+  jest.advanceTimersByTime(1000);
+  unsubscribe();
   unsubscribe();
   jest.advanceTimersByTime(5000);
 
