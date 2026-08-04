@@ -3,7 +3,13 @@
 // real to subscribe to and tear down.
 export function subscribe(onTick) {
   const id = setInterval(() => onTick(new Date()), 1000);
+  let didUnsubscribe = false;
+
   return function unsubscribe() {
+    if (didUnsubscribe) {
+      return;
+    }
+    didUnsubscribe = true;
     clearInterval(id);
   };
 }
