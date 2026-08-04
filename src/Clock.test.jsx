@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React from "react";
 import renderer, { act } from "react-test-renderer";
 
 import Clock from "./Clock";
