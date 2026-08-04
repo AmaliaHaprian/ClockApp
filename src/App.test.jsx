@@ -18,5 +18,7 @@ test("renders the heading and the Clock", () => {
   expect(root.root.findByType("h1").children).toEqual(["Sample App"]);
   expect(root.root.findByProps({ className: "clock" })).toBeTruthy();
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
