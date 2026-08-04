@@ -4,8 +4,6 @@ import renderer, { act } from "react-test-renderer";
 import App from "./App";
 
 jest.mock("./Clock", () => {
-  const React = require("react");
-
   return function MockClock() {
     return <div className="clock">mock clock</div>;
   };
