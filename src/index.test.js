@@ -1,32 +1,49 @@
-/** @jest-environment jsdom */
+import React from "react";
 
-import { createRoot } from "react-dom/client";
-
-jest.mock("react-dom/client", () => ({
-  createRoot: jest.fn(),
-}));
-
-jest.mock("./App", () => "mock-app");
+const originalDocument = global.document;
 
 describe("src/index bootstrap", () => {
+  let createRoot;
+  let render;
+
   beforeEach(() => {
     jest.resetModules();
-    document.body.innerHTML = '<div id="root"></div>';
-    createRoot.mockReset();
+
+    render = jest.fn();
+    createRoot = jest.fn(() => ({ render }));
+
+    global.document = {
+      getElementById: jest.fn((id) => (id === "root" ? { id } : null)),
+    };
+
+    jest.doMock("react-dom/client", () => ({
+      createRoot,
+    }));
+
+    jest.doMock("./App", () => ({
+      __esModule: true,
+      default: "mock-app",
+    }));
+  });
+
+  afterEach(() => {
+    global.document = originalDocument;
+    jest.dontMock("react-dom/client");
+    jest.dontMock("./App");
   });
 
   test("creates a root once for #root and renders App with it", async () => {
-    const container = document.getElementById("root");
-    const render = jest.fn();
-    createRoot.mockReturnValue({ render });
+    const container = global.document.getElementById("root");
 
     await import("./index");
 
+    expect(global.document.getElementById).toHaveBeenCalledWith("root");
     expect(createRoot).toHaveBeenCalledTimes(1);
     expect(createRoot).toHaveBeenCalledWith(container);
     expect(render).toHaveBeenCalledTimes(1);
 
     const renderedElement = render.mock.calls[0][0];
+    expect(React.isValidElement(renderedElement)).toBe(true);
     expect(renderedElement.type).toBe("mock-app");
     expect(renderedElement.props).toEqual({});
   });
