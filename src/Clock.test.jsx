@@ -17,7 +17,9 @@ test("subscribes on mount and renders a clock div", () => {
   expect(subscribe).toHaveBeenCalledTimes(1);
   expect(root.toJSON().props.className).toBe("clock");
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
 
 test("unsubscribes on unmount", () => {
@@ -54,4 +56,48 @@ test("re-renders with the time passed to the subscribed callback", () => {
   expect(root.toJSON().children[0]).toBe(
     new Date("2026-08-01T09:30:00").toLocaleTimeString(),
   );
+
+  act(() => {
+    root.unmount();
+  });
+});
+
+test("StrictMode runs effect setup, cleanup, and setup again in development", () => {
+  const unsubscribes = [];
+
+  subscribe.mockImplementation(() => {
+    const unsubscribe = jest.fn();
+    unsubscribes.push(unsubscribe);
+    return unsubscribe;
+  });
+
+  let root;
+  act(() => {
+    root = renderer.create(
+      <React.StrictMode>
+        <Clock />
+      </React.StrictMode>,
+    );
+  });
+
+  expect(subscribe.mock.calls.length).toBeGreaterThanOrEqual(1);
+  expect(unsubscribes.length).toBeGreaterThanOrEqual(1);
+  expect(unsubscribes.length).toBeLessThanOrEqual(subscribe.mock.calls.length);
+
+  if (unsubscribes.length > 1) {
+    expect(
+      unsubscribes
+        .slice(0, -1)
+        .every((unsubscribe) => unsubscribe.mock.calls.length === 1),
+    ).toBe(true);
+  }
+
+  expect(unsubscribes.at(-1)).toBeDefined();
+  expect(unsubscribes.at(-1)).not.toHaveBeenCalled();
+
+  act(() => {
+    root.unmount();
+  });
+
+  expect(unsubscribes.at(-1)).toHaveBeenCalledTimes(1);
 });

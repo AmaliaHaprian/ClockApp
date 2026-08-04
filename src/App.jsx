@@ -1,4 +1,4 @@
-import React from "react";
+import React, { StrictMode } from "react";
 
 import Clock from "./Clock";
 
@@ -6,9 +6,11 @@ import Clock from "./Clock";
 // a parent to render it.
 export default function App() {
   return (
-    <main>
-      <h1>Sample App</h1>
-      <Clock />
-    </main>
+    <StrictMode>
+      <main>
+        <h1>Sample App</h1>
+        <Clock />
+      </main>
+    </StrictMode>
   );
 }

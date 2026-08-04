@@ -7,7 +7,7 @@ jest.mock("./clock-source", () => ({
   subscribe: jest.fn(() => jest.fn()),
 }));
 
-test("renders the heading and the Clock", () => {
+test("renders the heading and the Clock inside StrictMode", () => {
   let root;
   act(() => {
     root = renderer.create(<App />);
@@ -18,5 +18,7 @@ test("renders the heading and the Clock", () => {
   expect(root.root.findByType("h1").children).toEqual(["Sample App"]);
   expect(root.root.findByProps({ className: "clock" })).toBeTruthy();
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
