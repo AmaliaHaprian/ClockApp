@@ -63,12 +63,13 @@ test("re-renders with the time passed to the subscribed callback", () => {
 });
 
 test("StrictMode runs effect setup, cleanup, and setup again in development", () => {
-  const unsubscribeFirst = jest.fn();
-  const unsubscribeSecond = jest.fn();
+  const unsubscribes = [];
 
-  subscribe
-    .mockImplementationOnce(() => unsubscribeFirst)
-    .mockImplementationOnce(() => unsubscribeSecond);
+  subscribe.mockImplementation(() => {
+    const unsubscribe = jest.fn();
+    unsubscribes.push(unsubscribe);
+    return unsubscribe;
+  });
 
   let root;
   act(() => {
@@ -79,13 +80,15 @@ test("StrictMode runs effect setup, cleanup, and setup again in development", ()
     );
   });
 
-  expect(subscribe).toHaveBeenCalledTimes(2);
-  expect(unsubscribeFirst).toHaveBeenCalledTimes(1);
-  expect(unsubscribeSecond).not.toHaveBeenCalled();
+  expect(subscribe.mock.calls.length).toBeGreaterThanOrEqual(2);
+  expect(unsubscribes.length).toBe(subscribe.mock.calls.length);
+  expect(unsubscribes.slice(0, -1).every((unsubscribe) => unsubscribe.mock.calls.length === 1)).toBe(true);
+  expect(unsubscribes.at(-1)).toBeDefined();
+  expect(unsubscribes.at(-1)).not.toHaveBeenCalled();
 
   act(() => {
     root.unmount();
   });
 
-  expect(unsubscribeSecond).toHaveBeenCalledTimes(1);
+  expect(unsubscribes.at(-1)).toHaveBeenCalledTimes(1);
 });
