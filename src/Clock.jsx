@@ -7,7 +7,7 @@ import { subscribe } from "./clock-source";
 // the canonical lifecycle-to-hooks conversion the T9 Transformer performs
 // (componentDidMount/componentWillUnmount -> a single useEffect with cleanup).
 // The transformed form lives in fixture/canned/src/Clock.jsx.
-export default function Clock(props) {
+export default function Clock() {
   const [now, setNow] = React.useState(() => new Date());
 
   React.useEffect(() => {
