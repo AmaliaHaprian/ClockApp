@@ -1,6 +1,6 @@
 import React from "react";
 
-const originalDocument = global.document;
+const originalDocument = globalThis.document;
 
 describe("src/index bootstrap", () => {
   let createRoot;
@@ -12,7 +12,7 @@ describe("src/index bootstrap", () => {
     render = jest.fn();
     createRoot = jest.fn(() => ({ render }));
 
-    global.document = {
+    globalThis.document = {
       getElementById: jest.fn((id) => (id === "root" ? { id } : null)),
     };
 
@@ -27,17 +27,17 @@ describe("src/index bootstrap", () => {
   });
 
   afterEach(() => {
-    global.document = originalDocument;
+    globalThis.document = originalDocument;
     jest.dontMock("react-dom/client");
     jest.dontMock("./App");
   });
 
   test("creates a root once for #root and renders App with it", async () => {
-    const container = global.document.getElementById("root");
+    const container = globalThis.document.getElementById("root");
 
     await import("./index");
 
-    expect(global.document.getElementById).toHaveBeenCalledWith("root");
+    expect(globalThis.document.getElementById).toHaveBeenCalledWith("root");
     expect(createRoot).toHaveBeenCalledTimes(1);
     expect(createRoot).toHaveBeenCalledWith(container);
     expect(render).toHaveBeenCalledTimes(1);
