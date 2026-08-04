@@ -14,9 +14,8 @@ describe("App", () => {
   let consoleWarnSpy;
 
   beforeEach(() => {
-    cleanup = jest.fn();
-    subscribe.mockImplementation(() => cleanup);
     jest.clearAllMocks();
+    cleanup = jest.fn();
     subscribe.mockImplementation(() => cleanup);
     consoleErrorSpy = jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
     consoleWarnSpy = jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
