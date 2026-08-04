@@ -11,14 +11,14 @@ describe("application entry point", () => {
     document.body.innerHTML = "";
   });
 
-  test("creates a root once for #root and renders App with the React 18 root API", () => {
+  test("creates a root once for #root and renders App with the React 18 root API", async () => {
     document.body.innerHTML = '<div id="root"></div>';
 
     const render = jest.fn();
-    const { createRoot } = require("react-dom/client");
+    const { createRoot } = await import("react-dom/client");
     createRoot.mockReturnValue({ render });
 
-    require("./index");
+    await import("./index");
 
     const container = document.getElementById("root");
     expect(createRoot).toHaveBeenCalledTimes(1);
@@ -27,7 +27,7 @@ describe("application entry point", () => {
     expect(render).toHaveBeenCalledWith(expect.objectContaining({ type: "mock-app" }));
   });
 
-  test("does not use the legacy ReactDOM.render bootstrap", () => {
+  test("does not use the legacy ReactDOM.render bootstrap", async () => {
     document.body.innerHTML = '<div id="root"></div>';
 
     const reactDomRender = jest.fn();
@@ -36,10 +36,10 @@ describe("application entry point", () => {
     }));
 
     const render = jest.fn();
-    const { createRoot } = require("react-dom/client");
+    const { createRoot } = await import("react-dom/client");
     createRoot.mockReturnValue({ render });
 
-    require("./index");
+    await import("./index");
 
     expect(reactDomRender).not.toHaveBeenCalled();
     expect(createRoot).toHaveBeenCalledTimes(1);
