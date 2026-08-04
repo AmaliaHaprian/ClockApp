@@ -3,11 +3,13 @@ import renderer, { act } from "react-test-renderer";
 
 import App from "./App";
 
-jest.mock("./clock-source", () => ({
-  subscribe: jest.fn(() => jest.fn()),
-}));
+jest.mock("./Clock", () => {
+  const MockClock = () => <div className="clock">Mock Clock</div>;
+  MockClock.displayName = "Clock";
+  return MockClock;
+});
 
-test("renders the heading and the Clock", () => {
+test("renders the heading and mounts Clock", () => {
   let root;
   act(() => {
     root = renderer.create(<App />);
