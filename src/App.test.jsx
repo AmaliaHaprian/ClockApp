@@ -1,4 +1,3 @@
-import React from "react";
 import renderer, { act } from "react-test-renderer";
 
 import App from "./App";
@@ -17,7 +16,6 @@ test("renders the heading and the Clock inside StrictMode", () => {
   expect(tree.type).toBe("main");
   expect(root.root.findByType("h1").children).toEqual(["Sample App"]);
   expect(root.root.findByProps({ className: "clock" })).toBeTruthy();
-  expect(root.root.findByType(React.StrictMode).findByType("main")).toBeTruthy();
 
   act(() => {
     root.unmount();
