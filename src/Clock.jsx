@@ -7,28 +7,21 @@ import { subscribe } from "./clock-source";
 // the canonical lifecycle-to-hooks conversion the T9 Transformer performs
 // (componentDidMount/componentWillUnmount -> a single useEffect with cleanup).
 // The transformed form lives in fixture/canned/src/Clock.jsx.
-export default class Clock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { now: new Date() };
-    this.handleTick = this.handleTick.bind(this);
-  }
+export default function Clock() {
+  const [now, setNow] = React.useState(() => new Date());
 
-  componentDidMount() {
-    this.unsubscribe = subscribe(this.handleTick);
-  }
+  React.useEffect(() => {
+    let unsubscribe = subscribe((nextNow) => {
+      setNow(nextNow);
+    });
 
-  componentWillUnmount() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+        unsubscribe = null;
+      }
+    };
+  }, []);
 
-  handleTick(now) {
-    this.setState({ now });
-  }
-
-  render() {
-    return <div className="clock">{this.state.now.toLocaleTimeString()}</div>;
-  }
+  return <div className="clock">{now.toLocaleTimeString()}</div>;
 }
