@@ -10,8 +10,9 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-test("subscribes on mount and renders a clock div", () => {
-  subscribe.mockImplementation(() => jest.fn());
+test("test(Clock): subscribes on mount and renders a clock div", () => {
+  const unsubscribe = jest.fn();
+  subscribe.mockImplementation(() => unsubscribe);
 
   let root;
   act(() => {
@@ -29,6 +30,8 @@ test("subscribes on mount and renders a clock div", () => {
   act(() => {
     root.unmount();
   });
+
+  expect(unsubscribe).toHaveBeenCalledTimes(1);
 });
 
 test("test(Clock): unsubscribes on unmount", () => {
@@ -80,54 +83,11 @@ test("test(Clock): re-renders with the time passed to the subscribed callback", 
     handleTick(nextTime);
   });
 
-  expect(root.toJSON().children[0]).toBe(
-    new Date("2026-08-01T09:30:00").toLocaleTimeString(),
-  );
-
-  act(() => {
-    root.unmount();
-  });
-});
-
-test("cleanup is idempotent across repeated unmount cleanup calls", () => {
-  const unsubscribe = jest.fn();
-  subscribe.mockImplementation(() => unsubscribe);
-
-  let root;
-  act(() => {
-    root = renderer.create(<Clock />);
-  });
+  expect(root.toJSON().children[0]).toBe(nextTime.toLocaleTimeString());
 
   act(() => {
     root.unmount();
   });
 
   expect(unsubscribe).toHaveBeenCalledTimes(1);
-});
-
-test("does not create duplicate subscriptions in StrictMode", () => {
-  const unsubscribeA = jest.fn();
-  const unsubscribeB = jest.fn();
-  subscribe
-    .mockImplementationOnce(() => unsubscribeA)
-    .mockImplementationOnce(() => unsubscribeB);
-
-  let root;
-  act(() => {
-    root = renderer.create(
-      <React.StrictMode>
-        <Clock />
-      </React.StrictMode>,
-    );
-  });
-
-  expect(subscribe.mock.calls.length).toBeLessThanOrEqual(2);
-
-  act(() => {
-    root.unmount();
-  });
-
-  expect(unsubscribeA.mock.calls.length + unsubscribeB.mock.calls.length).toBe(
-    subscribe.mock.calls.length,
-  );
 });

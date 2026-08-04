@@ -10,7 +10,7 @@ jest.mock("./clock-source", () => ({
 test("renders the heading and the Clock", () => {
   let root;
   act(() => {
-    root = renderer.create(<App />);
+    root = renderer.create(<App someProp="value" />);
   });
 
   const tree = root.toJSON();
