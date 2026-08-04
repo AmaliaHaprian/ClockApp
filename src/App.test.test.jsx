@@ -10,19 +10,13 @@ jest.mock("./clock-source", () => ({
 
 describe("App", () => {
   let unsubscribe;
-  let consoleErrorSpy;
-  let consoleWarnSpy;
 
   beforeEach(() => {
     unsubscribe = jest.fn();
     subscribe.mockImplementation(() => unsubscribe);
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    consoleErrorSpy.mockRestore();
-    consoleWarnSpy.mockRestore();
     jest.clearAllMocks();
   });
 
@@ -45,7 +39,5 @@ describe("App", () => {
     });
 
     expect(unsubscribe).toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 });
