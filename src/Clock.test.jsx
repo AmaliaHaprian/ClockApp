@@ -6,6 +6,10 @@ import { subscribe } from "./clock-source";
 
 jest.mock("./clock-source");
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 test("subscribes on mount and renders a clock div", () => {
   subscribe.mockImplementation(() => jest.fn());
 
@@ -17,7 +21,9 @@ test("subscribes on mount and renders a clock div", () => {
   expect(subscribe).toHaveBeenCalledTimes(1);
   expect(root.toJSON().props.className).toBe("clock");
 
-  root.unmount();
+  act(() => {
+    root.unmount();
+  });
 });
 
 test("unsubscribes on unmount", () => {
@@ -54,4 +60,41 @@ test("re-renders with the time passed to the subscribed callback", () => {
   expect(root.toJSON().children[0]).toBe(
     new Date("2026-08-01T09:30:00").toLocaleTimeString(),
   );
+
+  act(() => {
+    root.unmount();
+  });
+});
+
+test("cleans up and re-subscribes cleanly across a remount", () => {
+  const unsubscriptions = [];
+  subscribe.mockImplementation(() => {
+    const unsubscribe = jest.fn();
+    unsubscriptions.push(unsubscribe);
+    return unsubscribe;
+  });
+
+  let firstRoot;
+  act(() => {
+    firstRoot = renderer.create(<Clock />);
+  });
+  act(() => {
+    firstRoot.unmount();
+  });
+
+  let secondRoot;
+  act(() => {
+    secondRoot = renderer.create(<Clock />);
+  });
+
+  expect(subscribe).toHaveBeenCalledTimes(2);
+  expect(unsubscriptions).toHaveLength(2);
+  expect(unsubscriptions[0]).toHaveBeenCalledTimes(1);
+  expect(unsubscriptions[1]).not.toHaveBeenCalled();
+
+  act(() => {
+    secondRoot.unmount();
+  });
+
+  expect(unsubscriptions[1]).toHaveBeenCalledTimes(1);
 });
