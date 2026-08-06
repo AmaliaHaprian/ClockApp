@@ -28,3 +28,15 @@ test("unsubscribe stops further ticks", () => {
 
   expect(onTick).toHaveBeenCalledTimes(1);
 });
+
+test("unsubscribe is idempotent", () => {
+  const onTick = jest.fn();
+  const unsubscribe = subscribe(onTick);
+
+  jest.advanceTimersByTime(1000);
+  unsubscribe();
+  unsubscribe();
+  jest.advanceTimersByTime(5000);
+
+  expect(onTick).toHaveBeenCalledTimes(1);
+});
