@@ -6,6 +6,10 @@ import { subscribe } from "./clock-source";
 
 jest.mock("./clock-source");
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 test("subscribes on mount and renders a clock div", () => {
   subscribe.mockImplementation(() => jest.fn());
 
