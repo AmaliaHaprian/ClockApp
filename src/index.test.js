@@ -4,8 +4,6 @@ jest.mock("react-dom/client", () => ({
 
 jest.mock("./App", () => "App");
 
-import { createRoot } from "react-dom/client";
-
 describe("index entrypoint", () => {
   beforeEach(() => {
     jest.resetModules();
@@ -14,6 +12,7 @@ describe("index entrypoint", () => {
 
   test("creates a root for #root and renders App exactly once", async () => {
     const render = jest.fn();
+    const { createRoot } = await import("react-dom/client");
     createRoot.mockReturnValue({ render });
 
     await import("./index");
