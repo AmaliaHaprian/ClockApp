@@ -4,18 +4,19 @@ jest.mock("react-dom/client", () => ({
 
 jest.mock("./App", () => "App");
 
+import { createRoot } from "react-dom/client";
+
 describe("index entrypoint", () => {
   beforeEach(() => {
     jest.resetModules();
     document.body.innerHTML = '<div id="root"></div>';
   });
 
-  test("creates a root for #root and renders App exactly once", () => {
+  test("creates a root for #root and renders App exactly once", async () => {
     const render = jest.fn();
-    const { createRoot } = require("react-dom/client");
     createRoot.mockReturnValue({ render });
 
-    require("./index");
+    await import("./index");
 
     const container = document.getElementById("root");
     expect(createRoot).toHaveBeenCalledTimes(1);
